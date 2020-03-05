@@ -9,8 +9,6 @@ import dataaccess.NoteDB;
 import java.util.List;
 import models.Note;
 
-
-
 /**
  *
  * @author 799470
@@ -25,5 +23,10 @@ public class NoteService {
     public List<Note> getAll() {
         List<Note> notesList = noteDB.getAll();
         return notesList;
+    }
+    
+    public Note get(int noteid) {
+        Note note = noteDB.get(noteid);
+        return note;
     }
 }

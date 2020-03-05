@@ -25,4 +25,14 @@ public class NoteDB {
         }
     }
     
+    public Note get(int noteid) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        try {
+            Note note = em.find(Note.class, noteid);
+            return note;
+        } finally {
+            em.close();
+        }
+    }
+    
 }
