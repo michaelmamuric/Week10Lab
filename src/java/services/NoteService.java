@@ -6,6 +6,7 @@
 package services;
 
 import dataaccess.NoteDB;
+import java.util.Date;
 import java.util.List;
 import models.Note;
 
@@ -29,4 +30,26 @@ public class NoteService {
         Note note = noteDB.get(noteid);
         return note;
     }
+    
+    public int update(int noteid, String title, String contents) {
+        Note note = get(noteid);
+        note.setDatecreated(new Date());
+        note.setTitle(title);
+        note.setContents(contents);
+        return noteDB.update(note);
+    }
+    
+    public int insert(String title, String contents) {
+        Note newNote = new Note();
+        newNote.setDatecreated(new Date());
+        newNote.setTitle(title);
+        newNote.setContents(contents);
+        return noteDB.insert(newNote);
+    }
+    
+    public int delete(int noteid) {
+        Note note = noteDB.get(noteid);
+        return noteDB.delete(note);
+    }
+    
 }

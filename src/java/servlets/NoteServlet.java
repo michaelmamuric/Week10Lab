@@ -19,7 +19,7 @@ import services.NoteService;
  * @author 799470
  */
 public class NoteServlet extends HttpServlet {
-
+        
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -31,7 +31,10 @@ public class NoteServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
+        NoteService service = new NoteService();
+        List<Note> notesList = service.getAll();
+        request.setAttribute("notesList", notesList);
+        getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -46,10 +49,7 @@ public class NoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        NoteService service = new NoteService();
-        List<Note> notesList = service.getAll();
-        request.setAttribute("notesList", notesList);
-        request.setAttribute("mode", "view");
+        request.setAttribute("mode", "view"); 
         processRequest(request, response);
     }
 
@@ -72,9 +72,42 @@ public class NoteServlet extends HttpServlet {
         // Edit
         if(request.getParameter("edit") != null) {
             int noteID = Integer.parseInt(request.getParameter("noteID"));
+            
             Note note = service.get(noteID);
+            request.setAttribute("selectedNoteID", note.getNoteid());
             request.setAttribute("noteTitle", note.getTitle());
             request.setAttribute("noteContents", note.getContents());
+        }
+        
+        // Save (Update)
+        if(request.getParameter("save") != null) {
+            int noteIDSave =  Integer.parseInt(request.getParameter("selectedNoteID"));
+                      
+            String newTitle = request.getParameter("noteTitle");
+            String newContent = request.getParameter("noteContent");
+            service.update(noteIDSave, newTitle, newContent);
+            
+            // Set to view so that Add Note will be shown in JSP
+            request.setAttribute("mode", "view");
+        }
+        
+        // Add
+        if(request.getParameter("add") != null) {
+            String newTitle = request.getParameter("noteTitle");
+            String newContent = request.getParameter("noteContent");
+            service.insert(newTitle, newContent);
+            
+            // Set to view so that Add Note will be shown in JSP
+            request.setAttribute("mode", "view");
+        }
+        
+        // Delete
+        if(request.getParameter("delete") != null) {
+            int noteIDDelete =  Integer.parseInt(request.getParameter("selectedNoteID"));
+            service.delete(noteIDDelete);
+            
+            // Set to view so that Add Note will be shown in JSP
+            request.setAttribute("mode", "view");
         }
         
         processRequest(request, response);

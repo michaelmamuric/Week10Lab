@@ -7,6 +7,7 @@ package dataaccess;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import models.Note;
 
 /**
@@ -33,6 +34,57 @@ public class NoteDB {
         } finally {
             em.close();
         }
+    }
+    
+    public int update(Note note) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        
+        try {
+            et.begin();
+            em.merge(note);
+            et.commit();
+            return 1;
+        } catch(Exception e) {
+            et.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public int insert(Note note) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        
+        try {
+            et.begin();
+            em.persist(note);
+            et.commit();
+            return 1;
+        } catch(Exception e) {
+            et.rollback();
+            throw e;
+        } finally {
+            em.close();
+        } 
+    }
+    
+    public int delete(Note note) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        
+        try {
+            et.begin();
+            em.remove(em.merge(note));
+            et.commit();
+            return 1;
+        } catch(Exception e) {
+            et.rollback();
+            throw e;
+        } finally {
+            em.close();
+        } 
     }
     
 }
