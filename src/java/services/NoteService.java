@@ -9,6 +9,7 @@ import dataaccess.NoteDB;
 import java.util.Date;
 import java.util.List;
 import models.Note;
+import models.User;
 
 /**
  *
@@ -19,6 +20,7 @@ public class NoteService {
     
     public NoteService() {
         noteDB = new NoteDB();
+        
     }
     
     public List<Note> getAll() {
@@ -44,6 +46,9 @@ public class NoteService {
         newNote.setDatecreated(new Date());
         newNote.setTitle(title);
         newNote.setContents(contents);
+        // This is a hack just to make Lab 10 work
+        // Note table structure has changed and needs to have an owner!
+        newNote.setOwner(new User("anne"));
         return noteDB.insert(newNote);
     }
     

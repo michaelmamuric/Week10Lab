@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -51,6 +53,9 @@ public class Note implements Serializable {
     @Basic(optional = false)
     @Column(name = "contents")
     private String contents;
+    @JoinColumn(name = "owner", referencedColumnName = "username")
+    @ManyToOne(optional = false)
+    private User owner;
 
     public Note() {
     }
@@ -96,6 +101,14 @@ public class Note implements Serializable {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Override
