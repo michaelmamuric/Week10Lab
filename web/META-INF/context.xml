@@ -3,7 +3,7 @@
 
     <Resource name="jdbc/NotesDB" auth="Container" 
         driverClassName="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/NotesDB?autoReconnect=true" 
+        url="jdbc:mysql://localhost:3306/notesdb?autoReconnect=true" 
         username="root" password="password" 
         maxActive="100" maxIdle="30" maxWait="10000" 
         logAbandoned="true" removeAbandoned="true" 

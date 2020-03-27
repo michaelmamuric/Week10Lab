@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body>
         <h1>Notes!</h1>
@@ -36,7 +37,7 @@
         
         <c:if test="${mode == 'view'}">
             <h2>Add Note</h2>
-            <form method="post">
+            <form method="post" id="addNote">
                 Title: <input type="text" name="noteTitle" /><br />
                 Content: <br />
                 <textarea name="noteContent" cols="25" rows="10"></textarea><br />
@@ -46,13 +47,12 @@
             
         <c:if test="${mode == 'edit'}">
             <h2>Edit Note</h2>
-            <form method="post">
+            <form method="post" id="editNote">
                 <input type="hidden" name="selectedNoteID" value="${selectedNoteID}" />
                 <input type="submit" name="delete" value="Delete Note" onclick="return confirm('Are you sure you want to delete this note?')" /><br />
                 Title: <input type="text" name="noteTitle" value="${noteTitle}" /><br />
                 Content: <br />
                 <textarea name="noteContent" cols="25" rows="10">${noteContents}</textarea><br />
-                <input type="submit" name="save" value="Save" />
             </form>
         </c:if>
     </body>
