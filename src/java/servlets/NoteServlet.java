@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -19,25 +20,7 @@ import services.NoteService;
  * @author 799470
  */
 public class NoteServlet extends HttpServlet {
-        
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        NoteService service = new NoteService();
-        List<Note> notesList = service.getAll();
-        request.setAttribute("notesList", notesList);
-        getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
-    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -49,8 +32,11 @@ public class NoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        NoteService service = new NoteService();
+        List<Note> notesList = service.getAll();
+        request.setAttribute("notesList", notesList);
         request.setAttribute("mode", "view"); 
-        processRequest(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
     }
 
     /**
@@ -65,12 +51,11 @@ public class NoteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         NoteService service = new NoteService();
-        List<Note> notesList = service.getAll();
-        request.setAttribute("notesList", notesList);
-        request.setAttribute("mode", "edit");
+        String action = request.getParameter("action");
         
         // Edit
-        if(request.getParameter("edit") != null) {
+        if(action.equals("Edit")) {
+            request.setAttribute("mode", "edit");
             int noteID = Integer.parseInt(request.getParameter("noteID"));
             
             Note note = service.get(noteID);
@@ -80,37 +65,32 @@ public class NoteServlet extends HttpServlet {
         }
         
         // Save (Update)
-        if(request.getParameter("save") != null) {
+        if(action.equals("Save")) {
+            request.setAttribute("mode", "view");
             int noteIDSave =  Integer.parseInt(request.getParameter("selectedNoteID"));
                       
             String newTitle = request.getParameter("noteTitle");
             String newContent = request.getParameter("noteContent");
             service.update(noteIDSave, newTitle, newContent);
-            
-            // Set to view so that Add Note will be shown in JSP
-            request.setAttribute("mode", "view");
         }
         
         // Add
-        if(request.getParameter("add") != null) {
+        if(action.equals("Add")) {
+            request.setAttribute("mode", "view");
             String newTitle = request.getParameter("noteTitle");
             String newContent = request.getParameter("noteContent");
             service.insert(newTitle, newContent);
-            
-            // Set to view so that Add Note will be shown in JSP
-            request.setAttribute("mode", "view");
         }
         
         // Delete
-        if(request.getParameter("delete") != null) {
+        if(action.equals("Delete")) {
             int noteIDDelete =  Integer.parseInt(request.getParameter("selectedNoteID"));
             service.delete(noteIDDelete);
-            
-            // Set to view so that Add Note will be shown in JSP
-            request.setAttribute("mode", "view");
         }
         
-        processRequest(request, response);
+        List<Note> notesList = service.getAll();
+        request.setAttribute("notesList", notesList);
+        getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
     }
 
     /**
