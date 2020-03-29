@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     // Before Edit
-    $(".beforeEdit").submit(function(event) {
+    $(".beforeEdit").submit(function(e) {
         $.ajax({
             type: "post",
             url: $(this).attr("action"),
@@ -31,6 +31,6 @@ $(document).ready(function() {
                 $("body").html("An error has occured.");
             }
         });
-        event.preventDefault();
+        e.preventDefault();
     });
 });
