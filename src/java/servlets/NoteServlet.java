@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import models.Note;
 import services.NoteService;
+import viewmodels.NoteViewModel;
 
 /**
  *
@@ -50,28 +51,29 @@ public class NoteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int noteID = 0;
         NoteService service = new NoteService();
         String action = request.getParameter("action");
         
         // Edit
         if(action.equals("Edit")) {
-            request.setAttribute("mode", "edit");
-            int noteID = Integer.parseInt(request.getParameter("noteID"));
+            boolean isAjax = request.getHeader("X-Requested-With").equals("XMLHttpRequest");
             
+            request.setAttribute("mode", "edit");
+            noteID = Integer.parseInt(request.getParameter("noteID"));
             Note note = service.get(noteID);
-            request.setAttribute("selectedNoteID", note.getNoteid());
-            request.setAttribute("noteTitle", note.getTitle());
-            request.setAttribute("noteContents", note.getContents());
-        }
-        
-        // Save (Update)
-        if(action.equals("Save")) {
-            request.setAttribute("mode", "view");
-            int noteIDSave =  Integer.parseInt(request.getParameter("selectedNoteID"));
-                      
-            String newTitle = request.getParameter("noteTitle");
-            String newContent = request.getParameter("noteContent");
-            service.update(noteIDSave, newTitle, newContent);
+            
+            
+            if(isAjax) {
+                Gson gson = new Gson();
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                NoteViewModel noteView = new NoteViewModel(note);
+                String json = gson.toJson(noteView);
+                System.out.println(json);
+                response.getWriter().write(json);
+                return;
+            }
         }
         
         // Add
@@ -84,8 +86,7 @@ public class NoteServlet extends HttpServlet {
         
         // Delete
         if(action.equals("Delete")) {
-            int noteIDDelete =  Integer.parseInt(request.getParameter("selectedNoteID"));
-            service.delete(noteIDDelete);
+            service.delete(noteID);
         }
         
         List<Note> notesList = service.getAll();

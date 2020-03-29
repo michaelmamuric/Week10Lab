@@ -27,8 +27,9 @@
                     <td>${notes.datecreated}</td>
                     <td>${notes.title}</td>
                     <td>
-                        <form method="post">
-                            <input type="submit" name="action" value="Edit" />
+                        <form method="post" class="beforeEdit">
+                            <input type="submit" value="Edit" />
+                            <input type="hidden" name="action" value="Edit" />
                             <input type="hidden" name="noteID" value="${notes.noteid}" />
                         </form>
                     </td>
@@ -49,14 +50,14 @@
             
         <c:if test="${mode == 'edit'}">
             <h2>Edit Note</h2>
-            <form method="post" action="notes" id="editNote">
-                <input type="hidden" name="selectedNoteID" value="${selectedNoteID}" />
+            <form method="post" action="notes" id="duringEdit">
                 <input type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you want to delete this note?')" /><br />
-                Title: <input type="text" name="noteTitle" value="${noteTitle}" /><br />
+                Title: <input type="text" name="noteTitle" id="title" /><br />
                 Content: <br />
-                <textarea name="noteContent" cols="25" rows="10">${noteContents}</textarea><br />
+                <textarea name="noteContent" cols="25" rows="10" id="contents"></textarea><br />
             </form>
         </c:if>
+            
         <div id="result"></div>
     </body>
 </html>

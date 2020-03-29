@@ -1,4 +1,5 @@
-$(document).ready(function() {    
+$(document).ready(function() {
+    // Add Note
     $("#addNote").submit(function(event) {          
         $.ajax({
             type: "post",
@@ -9,7 +10,23 @@ $(document).ready(function() {
                 $("#result").html("New note added.");
             },
             error: function() {
-                $("body").html("<div>Failure</div>");
+                $("body").html("An error has occured.");
+            }
+        });
+        event.preventDefault();
+    });
+});
+
+$(document).ready(function() {
+    // Before Edit
+    $(".beforeEdit").submit(function(event) {
+        $.ajax({
+            type: "post",
+            url: $(this).attr("action"),
+            data: $(this).serialize(),
+            success: function(responseJson) {
+                $("#title").val(responseJson.title);
+                $("#contents").val(responseJson.contents);
             }
         });
         event.preventDefault();
