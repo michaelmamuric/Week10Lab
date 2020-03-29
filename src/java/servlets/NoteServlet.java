@@ -56,24 +56,11 @@ public class NoteServlet extends HttpServlet {
         String action = request.getParameter("action");
         
         // Edit
-        if(action.equals("Edit")) {
-            boolean isAjax = request.getHeader("X-Requested-With").equals("XMLHttpRequest");
-            
+        if(action.equals("Edit")) {            
             request.setAttribute("mode", "edit");
             noteID = Integer.parseInt(request.getParameter("noteID"));
             Note note = service.get(noteID);
-            
-            
-            if(isAjax) {
-                Gson gson = new Gson();
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                NoteViewModel noteView = new NoteViewModel(note);
-                String json = gson.toJson(noteView);
-                System.out.println(json);
-                response.getWriter().write(json);
-                return;
-            }
+            request.setAttribute("note", note);
         }
         
         // Add

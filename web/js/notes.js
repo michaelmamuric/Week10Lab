@@ -24,9 +24,11 @@ $(document).ready(function() {
             type: "post",
             url: $(this).attr("action"),
             data: $(this).serialize(),
-            success: function(responseJson) {
-                $("#title").val(responseJson.title);
-                $("#contents").val(responseJson.contents);
+            success: function(response) {
+                $("body").html(response);
+            },
+            error: function() {
+                $("body").html("An error has occured.");
             }
         });
         event.preventDefault();
