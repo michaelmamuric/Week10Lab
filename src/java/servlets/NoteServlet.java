@@ -36,7 +36,9 @@ public class NoteServlet extends HttpServlet {
         NoteService service = new NoteService();
         List<Note> notesList = service.getAll();
         request.setAttribute("notesList", notesList);
-        request.setAttribute("mode", "view"); 
+        request.setAttribute("mode", "view");
+        
+        
         getServletContext().getRequestDispatcher("/WEB-INF/notes.jsp").forward(request, response);
     }
 
@@ -51,14 +53,13 @@ public class NoteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int noteID = 0;
         NoteService service = new NoteService();
         String action = request.getParameter("action");
         
         // Edit
         if(action.equals("Edit")) {            
             request.setAttribute("mode", "edit");
-            noteID = Integer.parseInt(request.getParameter("noteID"));
+            int noteID = Integer.parseInt(request.getParameter("noteID"));
             Note note = service.get(noteID);
             request.setAttribute("note", note);
         }
@@ -73,7 +74,9 @@ public class NoteServlet extends HttpServlet {
         
         // Delete
         if(action.equals("Delete")) {
-            service.delete(noteID);
+            int deleteNoteId = Integer.parseInt(request.getParameter("deleteNoteId"));
+            service.delete(deleteNoteId);
+            request.setAttribute("mode", "view");
         }
         
         List<Note> notesList = service.getAll();

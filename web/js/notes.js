@@ -15,11 +15,9 @@ $(document).ready(function() {
         });
         event.preventDefault();
     });
-});
-
-$(document).ready(function() {
+    
     // Before Edit
-    $(".beforeEdit").submit(function(evet) {
+    $(".beforeEdit").submit(function(event) {
         $.ajax({
             type: "post",
             url: $(this).attr("action"),
@@ -29,6 +27,22 @@ $(document).ready(function() {
             },
             error: function() {
                 $("body").html("An error has occured.");
+            }
+        });
+        event.preventDefault();
+    });
+    
+    // Delete Note
+    $("#deleteNote").submit(function(event) {
+        $.ajax({
+            type: "post",
+            url: $(this).attr("action"),
+            data: $(this).serialize(),
+            success: function(response) {
+                $("body").html(response);
+            },
+            error: function() {
+                $("#result").html("Error in deleting note.");
             }
         });
         event.preventDefault();

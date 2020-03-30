@@ -50,8 +50,14 @@
             
         <c:if test="${mode == 'edit'}">
             <h2>Edit Note</h2>
+            <form method="post" action="notes" id="deleteNote">
+                <input type="hidden" name="deleteNoteId" value="${note.noteid}" />
+                <input type="hidden" name="action" value="Delete" />
+                <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this note?')" /><br />
+            </form>
+                
             <form method="post" action="notes" id="duringEdit">
-                <input type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you want to delete this note?')" /><br />
+                <input type="hidden" name="editNoteId" value="${note.noteid}" />
                 Title: <input type="text" name="noteTitle" id="title" value="${note.title}" /><br />
                 Content: <br />
                 <textarea name="noteContent" cols="25" rows="10" id="contents">${note.contents}</textarea><br />
