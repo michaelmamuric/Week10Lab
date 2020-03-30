@@ -63,20 +63,27 @@ public class NoteServlet extends HttpServlet {
             Note note = service.get(noteID);
             request.setAttribute("note", note);
         }
-        
         // Add
-        if(action.equals("Add")) {
+        else if(action.equals("Add")) {
             request.setAttribute("mode", "view");
             String newTitle = request.getParameter("noteTitle");
             String newContent = request.getParameter("noteContent");
             service.insert(newTitle, newContent);
         }
-        
         // Delete
-        if(action.equals("Delete")) {
+        else if(action.equals("Delete")) {
             int deleteNoteId = Integer.parseInt(request.getParameter("deleteNoteId"));
             service.delete(deleteNoteId);
             request.setAttribute("mode", "view");
+        }
+        // Save
+        else {
+            int editNoteId = Integer.parseInt(request.getParameter("editNoteId"));
+            Note currentNote = service.get(editNoteId);
+            String newContent = request.getParameter("noteContent");
+            service.update(editNoteId, currentNote.getTitle(), newContent);
+            request.setAttribute("note", currentNote);
+            request.setAttribute("mode", "edit");
         }
         
         List<Note> notesList = service.getAll();

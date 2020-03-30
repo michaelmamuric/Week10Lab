@@ -10,23 +10,7 @@ $(document).ready(function() {
                 $("#result").html("New note added.");
             },
             error: function() {
-                $("body").html("An error has occured.");
-            }
-        });
-        event.preventDefault();
-    });
-    
-    // Before Edit
-    $(".beforeEdit").submit(function(event) {
-        $.ajax({
-            type: "post",
-            url: $(this).attr("action"),
-            data: $(this).serialize(),
-            success: function(response) {
-                $("body").html(response);
-            },
-            error: function() {
-                $("body").html("An error has occured.");
+                $("#result").html("An error has occured.");
             }
         });
         event.preventDefault();
@@ -47,4 +31,20 @@ $(document).ready(function() {
         });
         event.preventDefault();
     });
+   
+    // Edit Note
+    $("#duringEdit").keyup(function() {
+        $.ajax({
+            type: "post",
+            url: $(this).attr("action"),
+            data: $(this).serialize(),
+            success: function(response) {
+                $("body").html(response);
+            },
+            error: function() {
+                $("#result").html("Error in editing note.");
+            }
+        });
+    });
 });
+    

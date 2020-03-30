@@ -58,7 +58,8 @@
                 
             <form method="post" action="notes" id="duringEdit">
                 <input type="hidden" name="editNoteId" value="${note.noteid}" />
-                Title: <input type="text" name="noteTitle" id="title" value="${note.title}" /><br />
+                <input type="hidden" name="action" value="Save" />
+                Title: ${note.title} <br />
                 Content: <br />
                 <textarea name="noteContent" cols="25" rows="10" id="contents">${note.contents}</textarea><br />
             </form>
